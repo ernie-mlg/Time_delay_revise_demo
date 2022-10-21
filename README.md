@@ -2,11 +2,9 @@
 
 ------------------Oct.21----Update-------------
 
-Problem 1 and 2 solved.
-
 Problem:
     
-    Key before alternatives are lost.
+    All problems are solved.
 
 -------------------Oct.20-------------------------------
 
