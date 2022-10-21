@@ -11,6 +11,7 @@ print(type(data_yama))
 All = open(path_all,'rb')     #  , encoding='utf-8-sig'  , errors='ignore'
 data_wata_1 = json.load(All)  #, strict=False
 
+
 for res in data_yama['response']['results']:
 
      for alt in res['alternatives']:
@@ -37,6 +38,6 @@ for res in data_yama['response']['results']:
                               print(type(alt['transcript']))
                                                           
 path_yama_new = open(path_yama + '_new.json', 'w', encoding="utf-8")  # Open new file in unicode, encoding='utf-8-sig'
-json.dump(res, path_yama_new, ensure_ascii=False)     #  ensure_ascii=False
+json.dump(data_yama, path_yama_new, ensure_ascii=False)     #  ensure_ascii=False
 
 print('Onoyama finished.')
