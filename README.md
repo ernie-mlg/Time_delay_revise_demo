@@ -5,7 +5,8 @@
 Problem 1 and 2 solved.
 
 Problem:
-    Key before alternatives are lost.
+
+1.Key before alternatives are lost.
 
 
 -------------------Oct.20-------------------------------
