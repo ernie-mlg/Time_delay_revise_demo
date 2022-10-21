@@ -1,6 +1,7 @@
 # Time_delay_revise_demo
 
 ------------------Oct.21----Update-------------
+
 Problem 1 and 2 solved.
 
 Problem:
@@ -8,6 +9,7 @@ Problem:
 
 
 -------------------Oct.20-------------------------------
+
 Oct.20 first edition, still have some problems 
   
 The value of key "time_delay_start" and "time_delay_end" can be correctly output at the end of "alternatives" list.
