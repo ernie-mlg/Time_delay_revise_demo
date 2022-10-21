@@ -4,7 +4,7 @@
 
 Problem:
     
-    All problems are solved.
+    If the contents have a little bit error, time difference cannot be calculated.
 
 -------------------Oct.20-------------------------------
 
