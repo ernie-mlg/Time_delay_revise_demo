@@ -5,7 +5,8 @@ Problem:
 
 Problem 4. fixed. 
 
-    5. If the transcript is way more longer than the other one, for example transcript A have others vioce, time difference cannot be calculated.
+    5. If the transcript is way more longer than the other one, 
+       for example transcript A have others vioce, time difference cannot be calculated.
 
 ------------------Oct.21----Update-------------
 
