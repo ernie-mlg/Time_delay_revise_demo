@@ -1,10 +1,17 @@
 # Time_delay_revise_demo
 
+------------------Oct.28----Update-------------
+Problem:
+
+Problem 4. fixed. 
+
+    5. If the transcript is way more longer than the other one, for example transcript A have others vioce, time difference cannot be calculated.
+
 ------------------Oct.21----Update-------------
 
 Problem:
     
-    If the contents have a little bit error, time difference cannot be calculated.
+    4. If the contents have a little bit error, time difference cannot be calculated.
 
 -------------------Oct.20-------------------------------
 
@@ -14,7 +21,7 @@ The value of key "time_delay_start" and "time_delay_end" can be correctly output
 
 Problems:
 
-    In new json file, all the value of time delay were output at the top first lane.
-    In new json file, the value of transcript and word were output in Unicode.
-    Key before alternatives are lost.
+    1. In new json file, all the value of time delay were output at the top first lane.
+    2. In new json file, the value of transcript and word were output in Unicode.
+    3. Key before alternatives are lost.
 
