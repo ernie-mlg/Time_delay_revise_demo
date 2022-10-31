@@ -2,6 +2,7 @@
 
 
 ------------------Oct.31----Update-------------
+
 Problem 5 fixed. Different transcript has paired.
 
 Task:
@@ -9,6 +10,7 @@ Task:
     6. Calculation of time difference for long transcript. 
 
 ------------------Oct.28----Update-------------
+
 Problem:
 
 Problem 4. fixed. 
