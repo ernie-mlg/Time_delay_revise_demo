@@ -31,10 +31,10 @@ for res in data_yama['response']['results']:
                     def simirallity (trans1, trans2):
                          simi = editdistance.eval(trans1, trans2)
                          return simi   
-                    if len(alt_1['transcript']) < 9:
+                    if len(alt_1['transcript']) <= 9:
                          tolerance = len(alt_1['transcript']) - 3
-                         if tolerance <=0 :
-                              tolerance =1
+                         if tolerance <= 0:
+                              tolerance = 1
                     else :
                          tolerance = 10
 
@@ -73,23 +73,20 @@ for res in data_yama['response']['results']:
                     i = 0
                     similarity_list = []
 
-                    # print("lenth of yama transcript is ", len(alt_1['transcript']))
-                    # print("yama transcript is: ", alt_1['transcript'])
-                    # print("lenth of all transcript is ", len(alt['transcript']))
-                    # print("all transcript is: ", alt['transcript'])
                     while (i <= abs(len(alt_1['transcript'])-len(alt['transcript']))):
                         similarity_list.append(editdistance.eval(alt_1['transcript'][i:len(alt['transcript'])+i], alt['transcript']))
                         i = i + 1
                     position = similarity_list.index(min(similarity_list)) # Position of minimum similarity 
-                    # print('Split transcript in list No.', position, ', content ', alt_1['transcript'][position:position + len(alt['transcript'])]) 
+                    print('Split transcript in list No.', position, ', content ', alt_1['transcript'][position:position + len(alt['transcript'])]) 
+                    print('similarity_list is: ', similarity_list)
 
                     transcript_split_value.append(min(similarity_list))    # Value of minimum similarity 
                     transcript_split_word.append(alt_1['transcript'][position:position + len(alt['transcript'])])  # Content of minimum similarity
                     mini_value = transcript_split_value.index(min(transcript_split_value))
-                    alt['transcript_split'] = transcript_split_word[mini_value]
+                    alt['transcript_split'] = transcript_split_word[mini_value] # Recording of content in dictionary, json file
+                    print('transcript_split_value: ', transcript_split_value)
             
 path_yama_new = open(path_yama + '_new.json', 'w', encoding="utf-8")  # Open new file in unicode, encoding='utf-8-sig'
 json.dump(data_yama, path_yama_new, ensure_ascii=False)     #  ensure_ascii=False
 
-print('')
-print('Onoyama finished.')
+print('\n Onoyama finished.')
