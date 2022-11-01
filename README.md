@@ -1,5 +1,10 @@
 # Time_delay_revise_demo
 
+------------------Nov.1----Update-------------
+
+Task:
+
+    7. Find the time difference between transcript_split in onoyama file and kojima file. 
 
 ------------------Oct.31----Update-------------
 
