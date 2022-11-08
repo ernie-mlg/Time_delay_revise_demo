@@ -1,4 +1,7 @@
 # -- coding: utf-8 --
+
+__updated__ = '2022-11-08 14:41:51'
+
 import json
 import editdistance
 
@@ -39,7 +42,7 @@ for res in data_yama['response']['results']:
                          tolerance = 10
 
                     if simirallity (alt_1['transcript'], alt['transcript']) < tolerance:
-                         
+                                                  
                          TDS = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
                          time_delay_start_list.append(TDS) # Recording in list of start time
                          alt['time_delay_start'] = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
@@ -85,8 +88,19 @@ for res in data_yama['response']['results']:
                     mini_value = transcript_split_value.index(min(transcript_split_value))
                     alt['transcript_split'] = transcript_split_word[mini_value] # Recording of content in dictionary, json file
                     print('transcript_split_value: ', transcript_split_value)
+
+                    print('End word of split transcript is', alt_1['words'][position:position + len(alt['transcript'])]) 
+
+                    # TDS = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
+                    # time_delay_start_list.append(TDS) # Recording in list of start time
+                    # alt['time_delay_start'] = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
+                    # TDE = alt_1['words'][-1]['endTime'] - alt['words'][-1]['endTime']
+                    # time_delay_end_list.append(TDE) # Recording in list of end time
+                    # alt['time_delay_end'] = alt_1['words'][-1]['endTime'] - alt['words'][-1]['endTime']
             
 path_yama_new = open(path_yama + '_new.json', 'w', encoding="utf-8")  # Open new file in unicode, encoding='utf-8-sig'
 json.dump(data_yama, path_yama_new, ensure_ascii=False)     #  ensure_ascii=False
 
 print('\n Onoyama finished.')
+
+__updated__ = '2022-11-08 14:16:51'
