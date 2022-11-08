@@ -6,7 +6,8 @@ Task:
 
     8. Find the end word and time difference between transcript_split in onoyama file and kojima file. 
     
-    
+New demo file "split_word_time.py" updated.
+
 ------------------Nov.1----Update-------------
 
 Task:
