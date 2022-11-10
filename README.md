@@ -1,5 +1,13 @@
 # Time_delay_revise_demo
 
+------------------Nov.10----Update-------------
+
+Task:
+
+    9. Creat a word and time list for observer(kojima) file.
+
+Old project changed.
+    
 ------------------Nov.8----Update-------------
 
 Task:
