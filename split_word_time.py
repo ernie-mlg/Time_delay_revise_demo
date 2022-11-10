@@ -318,25 +318,24 @@ d = {
                         "transcript_split": "音声を読み上げた、えっと、その読み読み上げるなんだろう"}]
                         }]}}
 
-word_number = []
+
 for res in d['response']['results']:
     for alt in res['alternatives']:
-        for words in alt['words']:
-            print(words['word'])
-            word_number.append(len(words['word']))
-        print (word_number)
-        j = 0   # j = position
-        k = 0   # Word list position
-        while (len(alt['transcript']) > j):
-            j += word_number[k]
-            k += 1          
-        print ("end time is", alt['words'][k-1]['endTime'], "\nword is (", alt['words'][k-1]['word'], ")")
+        if 'time_delay_end' not in res['alternatives']:
+            word_number = []
+            for words in alt['words']:
+                print(words['word'])
+                word_number.append(len(words['word']))
+            print (word_number)
+            j = 0   # j = position
+            k = 0   # Word list position
+            while (len(alt['transcript']) > j):
+                j += word_number[k]
+                k += 1          
+            print ("end time is", alt['words'][k-1]['endTime'], "\nword is (", alt['words'][k-1]['word'], ")")
+            alt['time_delay_end'] = alt['words'][k-1]['endTime'] - alt['words'][k-1]['endTime']
+            alt['time_delay_start'] = alt['words'][0]['startTime'] - alt['words'][0]['startTime']
+            print ("time_delay_end is", alt['time_delay_end'], "\nword is (", alt['words'][k-1]['word'], ")")
+            print ("time_delay_start is", alt['time_delay_start'], "\nword is (", alt['words'][0]['word'], ")")
 
 print ("length is ", len(word_number))
-
-        # #打印返回值，其中d.keys()是列出字典所有的key
-        # if 'time_delay_start' in alt:
-        #     print ("yes")
-        # else:
-        #     print ("No")
-        # #两个的结果都是返回True
