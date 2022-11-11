@@ -1,5 +1,12 @@
 # Time_delay_revise_demo
 
+------------------Nov.11----Update-------------
+
+Task:
+  
+    10. Onoyama's short transcript cannot pair with Kojima's long transcript
+    
+       
 ------------------Nov.10----Update-------------
 
 Task:
