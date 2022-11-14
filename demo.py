@@ -1,6 +1,6 @@
 # -- coding: utf-8 --
 
-__updated__ = '2022-11-11 18:30:20'
+__updated__ = '2022-11-14 13:59:32'
 
 import json
 import editdistance
@@ -13,6 +13,9 @@ data_yama = json.load(yama, strict=False)    # return data in dict, strict check
 print(type(data_yama))
 All = open(path_all,'rb')     #  , encoding='utf-8-sig'  , errors='ignore'
 data_wata_1 = json.load(All)  #, strict=False
+def simirallity (trans1, trans2):
+     simi = editdistance.eval(trans1, trans2)
+     return simi
 
 ######################_New_Meta!_############################
 for res_1 in data_wata_1['response']['results']:  # Open Oberver dictionary by loop
@@ -30,20 +33,30 @@ for res_1 in data_wata_1['response']['results']:  # Open Oberver dictionary by l
                transcript_split_value = list()
                transcript_split_word = list()               
                for alt in res['alternatives']:    # Open alternatives, key before transcript for Onoyama             
-                    def simirallity (trans1, trans2):
-                         simi = editdistance.eval(trans1, trans2)
-                         return simi   
-
-                    time_tole = 40 # Reduce time error in xx second
+   
+                    time_tole = 40 # Reduce time error in xx second. Please do not over than longest duration
                     time_diff = abs(alt['words'][0]['startTime'] - alt_1['words'][0]['startTime'])     # reduce error by using time difference     
-                    if time_diff < time_tole:
+                    if time_diff <= time_tole:
+                         i = 0
+                         similarity_list = []
+                         while (i <= abs(len(alt_1['transcript'])-len(alt['transcript']))):    # Similarity testing
+                             similarity_list.append(editdistance.eval(alt['transcript'], alt_1['transcript'][i:len(alt['transcript'])+i]))  # Recording similarity for every word in list
+                             i = i + 1
+                         position = similarity_list.index(min(similarity_list)) # Position of minimum similarity 
+                         print('Split transcript in list No.', position, ', content ', alt_1['transcript'][position:position + len(alt['transcript'])]) 
+                         print('similarity_list is: ', similarity_list)
+
+                         transcript_split_value.append(min(similarity_list))    # Value of minimum similarity 
+                         transcript_split_word.append(alt_1['transcript'][position:position + len(alt['transcript'])])  # Content of minimum similarity
+                         mini_value = transcript_split_value.index(min(transcript_split_value))
+
                          if len(alt['transcript']) <= 9:
                               tolerance = len(alt['transcript']) - 3
                               if tolerance <= 0:
                                    tolerance = 2
                          else :
                               tolerance = 10
-                         if simirallity (alt_1['transcript'], alt['transcript']) < tolerance:                                                  
+                         if simirallity (alt_1['transcript'][position:position + len(alt['transcript'])], alt['transcript']) < tolerance:                                                  
                               TDS = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
                               time_delay_start_list.append(TDS) # Recording in list of start time
                               alt_1['time_delay_start'] = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
@@ -71,25 +84,14 @@ for res_1 in data_wata_1['response']['results']:  # Open Oberver dictionary by l
                                         minele_e = l
                               alt_1['time_delay_end'] = minele_e
                               # print('minimum end time delay is:', alt['time_delay_end'])    
-                              ######################_Error_adjustment_############################                    
-
-                              i = 0
-                              similarity_list = []
-                              while (i <= abs(len(alt_1['transcript'])-len(alt['transcript']))):    # Similarity testing
-                                  similarity_list.append(editdistance.eval(alt['transcript'], alt_1['transcript'][i:len(alt['transcript'])+i]))  # Recording similarity for every word in list
-                                  i = i + 1
-                              position = similarity_list.index(min(similarity_list)) # Position of minimum similarity 
-                              print('Split transcript in list No.', position, ', content ', alt_1['transcript'][position:position + len(alt['transcript'])]) 
-                              print('similarity_list is: ', similarity_list)
-
-                              transcript_split_value.append(min(similarity_list))    # Value of minimum similarity 
-                              transcript_split_word.append(alt_1['transcript'][position:position + len(alt['transcript'])])  # Content of minimum similarity
-                              mini_value = transcript_split_value.index(min(transcript_split_value))
+                              ######################_Error_adjustment_############################
+                                                  
                               alt_1['transcript_split'] = alt['transcript'] # Recording of compare content from Onoyama
                               # Need a loop for Onoyama transcript selecting                         
                               alt_1['transcript_list'].append(transcript_split_word[mini_value])    # Recording all similar transcript from Onoyama to All in a list
                               # print('transcript_split_value: ', transcript_split_value)
                               # print('End word of split transcript is', alt_1['words'][position:position + len(alt['transcript'])]) 
+
 
 path_all = path_all.split('.')[0] 
 path_all_new = open(path_all + '_new.json', 'w', encoding="utf-8")  # Open new file in unicode, encoding='utf-8-sig'
