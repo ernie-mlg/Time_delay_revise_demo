@@ -1,6 +1,6 @@
 # -- coding: utf-8 --
 
-__updated__ = '2022-11-14 13:59:32'
+__updated__ = '2022-11-14 15:21:42'
 
 import json
 import editdistance
@@ -14,19 +14,21 @@ print(type(data_yama))
 All = open(path_all,'rb')     #  , encoding='utf-8-sig'  , errors='ignore'
 data_wata_1 = json.load(All)  #, strict=False
 def simirallity (trans1, trans2):
-     simi = editdistance.eval(trans1, trans2)
+     simi = editdistance.eval(trans1, trans2)/len(trans2)
      return simi
+j = 0
 
 ######################_New_Meta!_############################
 for res_1 in data_wata_1['response']['results']:  # Open Oberver dictionary by loop
      for alt_1 in res_1['alternatives']:     # Open alternatives, key before transcript
           print('-----------------------------------------------------------------------------')
-          print('transcript:', alt_1['transcript'])
+          print('transcript of all:', alt_1['transcript'])
           # print('words[0]:', alt_1['words'][0]['word'], 'startTime:', alt_1['words'][0]['startTime'])
           # print('words[-1]:', alt_1['words'][-1]['word'],  'endTime:', alt_1['words'][-1]['endTime'])
           print('')
           alt_1['transcript_list'] = list()         
-
+          j += 1
+          
           for res in data_yama['response']['results']: # Open Onoyama dictionary by loop
                time_delay_start_list = list() # Create a new list for calculating minimum time error, start time
                time_delay_end_list = list() # For end time               
@@ -40,22 +42,24 @@ for res_1 in data_wata_1['response']['results']:  # Open Oberver dictionary by l
                          i = 0
                          similarity_list = []
                          while (i <= abs(len(alt_1['transcript'])-len(alt['transcript']))):    # Similarity testing
-                             similarity_list.append(editdistance.eval(alt['transcript'], alt_1['transcript'][i:len(alt['transcript'])+i]))  # Recording similarity for every word in list
+                             similarity_list.append(simirallity(alt_1['transcript'][i:len(alt['transcript'])+i], alt['transcript']))  # Recording similarity for every word in list
                              i = i + 1
                          position = similarity_list.index(min(similarity_list)) # Position of minimum similarity 
                          print('Split transcript in list No.', position, ', content ', alt_1['transcript'][position:position + len(alt['transcript'])]) 
+                         print('pair transcript of onoyama is ', alt['transcript'])
                          print('similarity_list is: ', similarity_list)
 
                          transcript_split_value.append(min(similarity_list))    # Value of minimum similarity 
                          transcript_split_word.append(alt_1['transcript'][position:position + len(alt['transcript'])])  # Content of minimum similarity
                          mini_value = transcript_split_value.index(min(transcript_split_value))
 
-                         if len(alt['transcript']) <= 9:
-                              tolerance = len(alt['transcript']) - 3
-                              if tolerance <= 0:
-                                   tolerance = 2
-                         else :
-                              tolerance = 10
+                         # if len(alt['transcript']) <= 9:
+                         #      tolerance = len(alt['transcript']) - 3
+                         #      if tolerance <= 0:
+                         #           tolerance = 2
+                         # else :
+                         #      tolerance = 10
+                         tolerance = 0.34    # difference permission smaller than 1/3 
                          if simirallity (alt_1['transcript'][position:position + len(alt['transcript'])], alt['transcript']) < tolerance:                                                  
                               TDS = alt_1['words'][0]['startTime'] - alt['words'][0]['startTime']
                               time_delay_start_list.append(TDS) # Recording in list of start time
