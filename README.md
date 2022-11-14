@@ -1,5 +1,11 @@
 # Time_delay_revise_demo
+------------------Nov.14----Update-------------
 
+Task:
+  
+    11. Need to reset transcript_split_value after one pair finished
+    
+       
 ------------------Nov.11----Update-------------
 
 Task:
