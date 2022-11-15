@@ -4,22 +4,19 @@
 demo_refactored was created.
 
 ------------------Nov.14----Update-------------
-
-Task:
-  
+ 
+ 
     11. Need to reset transcript_split_value after one pair finished
     
        
 ------------------Nov.11----Update-------------
-
-Task:
+  
   
     10. Onoyama's short transcript cannot pair with Kojima's long transcript
     
        
 ------------------Nov.10----Update-------------
 
-Task:
 
     9. Creat a word and time list for observer(kojima) file.
 
@@ -27,7 +24,6 @@ Old project changed.
     
 ------------------Nov.8----Update-------------
 
-Task:
 
     8. Find the end word and time difference between transcript_split in onoyama file and kojima file. 
     
@@ -35,15 +31,12 @@ New demo file "split_word_time.py" updated.
 
 ------------------Nov.1----Update-------------
 
-Task:
 
     7. Find the time difference between transcript_split in onoyama file and kojima file. 
 
 ------------------Oct.31----Update-------------
 
 Problem 5 fixed. Different transcript has paired.
-
-Task:
 
     6. Calculation of time difference for long transcript. 
 
