@@ -1,4 +1,8 @@
 # Time_delay_revise_demo
+------------------Nov.15----Update-------------
+
+demo_refactored was created.
+
 ------------------Nov.14----Update-------------
 
 Task:
