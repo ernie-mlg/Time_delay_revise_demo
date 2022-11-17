@@ -8,19 +8,13 @@ def similarity(str1, str2):
 
 def find_suit_position(trans_obs, trans_spk):
     similarity_list = []
-    transcript_split_value = []
-    transcript_split_word = []
     i = 0
     while (i <= abs(len(trans_obs) - len(trans_spk))):
         similarity_list.append(similarity(trans_obs[i:len(trans_spk) + 1], trans_spk))
         i += 1
 
-    pos_idx = similarity_list.index(min(similarity_list))
-    transcript_split_value.append(min(similarity_list))
-    transcript_split_word.append(trans_obs[pos_idx:pos_idx + len(trans_spk)])
-    min_value = transcript_split_value.index(min(transcript_split_value))
-
-    return pos_idx, min_value
+    pos_idx = similarity_list.index(max(similarity_list))
+    return pos_idx, similarity_list
 
 
 def get_time_delay(alt_obs, alt_spk):
@@ -35,10 +29,22 @@ def get_min_time_delay(time_delay_list):
     for l in time_delay_list:
         if abs(l) < min_abs:
             min_abs = abs(l)
-            min_ele = l
-
-    
+            min_ele = l 
     return min_ele                               
+
+def get_trans_time(alt_obs):
+    k = 0
+    j = 0
+    len_word = 0
+    for j in alt_obs['words']:
+        if len_word >= len(alt_obs['transcript_list'][j]):
+            TDS_split = alt_obs['words'][k]['startTime'] - alt_obs['words'][k+len_word]['startTime']
+            TDE_split = alt_obs['words'][k]['endTime'] - alt_obs['words'][k+len_word]['endTime']
+        else :
+            len_word += len(alt_obs['words'][k]['word'])
+            k += 1
+
+            return TDS_split, TDE_split
 
 
 def main():
@@ -51,9 +57,11 @@ def main():
     for res_obs in data_obs['response']['results']:
         for alt_obs in res_obs['alternatives']:
 
-            print('transcript of all:', alt_obs['transcript'])
+            print('---------------------------------')
+            print('Observer [{} to {}] : {} '.format(alt_obs['words'][0]['startTime'], alt_obs['words'][-1]['endTime'], alt_obs['transcript']))
             alt_obs['transcript_list'] = []
            
+        
             for res_spk in data_spk['response']['results']:
                 time_delay_start_list = []
                 time_delay_end_list = []
@@ -64,11 +72,27 @@ def main():
                     # if diff of time is less than 40 sec
                     if time_diff <= 40:
                         i = 0
-                        pos_idx, min_value = find_suit_position(alt_obs['transcript'], alt_spk['transcript'])
-                        if similarity(alt_obs['transcript'][pos_idx:pos_idx + len(alt_spk['transcript'])], alt_spk['transcript']) < 1 / 3:
+                        pos_idx, similarity_list = find_suit_position(alt_obs['transcript'], alt_spk['transcript'])
+                        trans_obs_sub = alt_obs['transcript'][pos_idx:pos_idx + len(alt_spk['transcript'])]
+                        transcript_split_value.append(max(similarity_list))
+                        transcript_split_word.append(trans_obs_sub)
+                        min_value = transcript_split_value.index(max(transcript_split_value))
+                        #print('Speaker [{} to {}] : {} '.format(alt_spk['words'][0]['startTime'], alt_spk['words'][-1]['endTime'], alt_spk['transcript']))
+                        if similarity(trans_obs_sub, alt_spk['transcript']) > 1 / 3:
+                                print('Speaker [{} to {}] : {} '.format(alt_spk['words'][0]['startTime'], alt_spk['words'][-1]['endTime'], alt_spk['transcript']))
+                                #obs_sub_startTime =
+                                #obs_sub_endTime =
+                                [word_info['word'] for word_info in  alt_obs['words']] 
+                                if similarity(alt_obs['transcript'], alt_spk['transcript']) > 0.8 :
+                                
+                                    spk_startTime = alt_obs['words'][0]['startTime']
+                                    spk_endTime = alt_obs['words'][-1]['endTime']
+                                else:
+                                    spk_startTime = None
+                                    spk_endTime = None
+                                    print('!!!!!!!!!!!!!!!!!!!!!')
+                                print('>>> Speaker in observer [{} to {}] : {} '.format(spk_startTime, spk_endTime, alt_spk['transcript']))
                                 TDS, TDE = get_time_delay(alt_obs, alt_spk)
-                                # alt_obs['time_delay_start'] = TDS
-                                # alt_spk['time_delay_end'] = TDE
                                 time_delay_start_list.append(TDS)
                                 time_delay_end_list.append(TDE)
                                
@@ -81,8 +105,12 @@ def main():
                                 alt_obs['transcript_split'] = alt_spk['transcript']
                                 
                                 alt_obs['transcript_list'].append(transcript_split_word[min_value])
+                                #transcript_split_word = []
+                                break
+    path_obs_new = open(path_obs.replace('.json', '_new.json'), 'w', encoding='utf-8')
+    json.dump(data_obs, path_obs_new, ensure_ascii=False)
 
-
+    print('wrote json to:', path_obs_new)
 
 if __name__ == '__main__':    
     main()
