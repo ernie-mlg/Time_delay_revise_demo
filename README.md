@@ -1,4 +1,9 @@
 # Time_delay_revise_demo
+
+------------------Nov.17----Update-------------
+
+It's a great honor for me that Miss shiori-w joined this issue today.
+
 ------------------Nov.15----Update-------------
 
 demo_refactored was created.
