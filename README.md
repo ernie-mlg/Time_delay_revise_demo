@@ -1,5 +1,11 @@
 # Time_delay_revise_demo
 
+------------------Nov.18----Update-------------
+
+ 
+    12. read other speaker file by glob and for loops.
+    
+
 ------------------Nov.17----Update-------------
 
 It's a great honor for me that Miss shiori-w joined this issue today.
