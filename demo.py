@@ -1,8 +1,9 @@
-__updated__ = '2022-11-18 16:12:36'
+__updated__ = '2022-11-22 15:50:51'
 
 import json
 import editdistance
 import glob
+import os
 from collections import Counter
 
 def similarity(str1, str2):
@@ -58,11 +59,26 @@ def get_min_time_delay(time_delay_list):
                 words_num += 1
         
     return TDS_split, TDE_split
+ 
+def get_file_path(file_pathname):
+    path_spk_list = []
+    file_pathname = file_pathname + '\\'
+    for filename in os.listdir(file_pathname):
+        path = os.path.join(file_pathname, filename)
+        if 'observer' not in filename:
+            if 'new' not in filename:
+                if 'meeting.json' in filename: 
+                    path_spk_list.append(file_pathname + filename) 
+                    print(path_spk_list)
+    return path_spk_list    
+
+
 
 def main():
 
+    path_spk_list = get_file_path(r"F:\Work\Ernie\sounds_Align\sounds_file")
     path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.json")  # Voice of all people
-    path_spk_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*[!observer]*meeting.json")     # Open local files of one person in list
+    # path_spk_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*[!observer]*meeting.json")     # Open local files of one person in list
     for path_obs in path_obs_list:
         data_obs = json.load(open(path_obs, 'rb'), strict=False)
         for path_spk in path_spk_list:
@@ -74,7 +90,7 @@ def main():
                     print('---------------------------------')
                     print('Observer:', alt_obs['transcript'])
                     alt_obs['transcript_list'] = []
-                   
+                    
                 
                     for res_spk in data_spk['response']['results']:
                         time_delay_start_list = []
