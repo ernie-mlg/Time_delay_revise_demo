@@ -1,5 +1,12 @@
 # Time_delay_revise_demo
 
+------------------Nov.24----Update-------------
+
+
+    12. Start to use codespace
+    14. Start to learn Dynamic Time Warping
+    
+
 ------------------Nov.18----Update-------------
 
  
