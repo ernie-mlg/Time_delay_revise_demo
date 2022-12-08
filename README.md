@@ -2,7 +2,7 @@
 
 ------------------Dec.8----Update-------------
 
-    15. Splited wav file into several different transcripts
+    15. Splited wav file into several different transcripts by new wav_time_change.py program
     16. Try to compare obs file with spk file
 
 ------------------Nov.24----Update-------------
