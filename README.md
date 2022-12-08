@@ -1,9 +1,14 @@
 # Time_delay_revise_demo
 
+------------------Dec.8----Update-------------
+
+    15. Splited wav file into several different transcripts
+    16. Try to compare obs file with spk file
+
 ------------------Nov.24----Update-------------
 
 
-    12. Start to use codespace
+    13. Start to use codespace
     14. Start to learn Dynamic Time Warping
     
 
