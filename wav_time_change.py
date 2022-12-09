@@ -58,9 +58,9 @@ def split_obs_wav(path_output): # Time delay not calculation
                 end_index = endTime * sr_obs
                 wav_data = data_obs[int(start_index):int(end_index)] 
                 sf.write(path_output + '\\obs_' + str(i) + '_.wav', wav_data, sr_obs)
-                _sound = AudioSegment.from_file(path_output + '\\obs_' + str(i) + '_.wav', "wav")
-                sound = effects.normalize(_sound)
-                sound.export(path_output + '\\obs_' + str(i) + '_normalized.wav', format="wav")
+                # _sound = AudioSegment.from_file(path_output + '\\obs_' + str(i) + '_.wav', "wav")
+                # sound = effects.normalize(_sound)
+                # sound.export(path_output + '\\obs_' + str(i) + '_normalized.wav', format="wav")
                    
 def correct_spk_wav(path_output): # Time delay calculation
     j = 0
@@ -79,23 +79,23 @@ def correct_spk_wav(path_output): # Time delay calculation
                 end_index = endTime * sr_obs
                 wav_data = data_spk[int(start_index):int(end_index)]
                 sf.write(path_output + '\\spk_' + str(j) + '_.wav', wav_data, sr_spk)
-                _sound = AudioSegment.from_file(path_output + '\\spk_' + str(j) + '_.wav', "wav")
-                sound = effects.normalize(_sound)
-                sound.export(path_output + '\\spk_' + str(j) + '_normalized.wav', format="wav")
+                # _sound = AudioSegment.from_file(path_output + '\\spk_' + str(j) + '_.wav', "wav")
+                # sound = effects.normalize(_sound)
+                # sound.export(path_output + '\\spk_' + str(j) + '_normalized.wav', format="wav")
 
-def normalize(path_output):
-    fs, data = wavfile.read(path_output)
+def normalize(path_obs, path_spk):
+    data_obs, data_spk = wavfile.read(path_obs, path_spk)
 
     plt.figure()
     plt.subplot(2,1,1)
-    plt.plot(data)
+    plt.plot(data_obs)  # before
 
-    xx = copy.deepcopy(data)
+    xx = copy.deepcopy(data_obs)
     xx = xx - np.mean(xx)
     x = xx/np.max(np.abs(xx))
 
     plt.subplot(2,1,2)
-    plt.plot(x)
+    plt.plot(x) # after
     plt.show()
 
 split_obs_wav(path_obs_out_1)
