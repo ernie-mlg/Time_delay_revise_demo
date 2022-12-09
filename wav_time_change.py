@@ -4,7 +4,10 @@ import os
 import json
 import matplotlib.pyplot as plt
 import soundfile as sf
+import copy
 import numpy as np
+from pydub import effects, AudioSegment
+from scipy.io import wavfile
 
 def get_wav_path(file_pathname):
     path_spk_list = []
@@ -54,8 +57,11 @@ def split_obs_wav(path_output): # Time delay not calculation
                 endTime = alt_obs['words'][-1]['endTime']
                 end_index = endTime * sr_obs
                 wav_data = data_obs[int(start_index):int(end_index)] 
-                sf.write(path_output + '\\obs_' + str(i) + '_.wav', wav_data, sr_obs)                   
-
+                sf.write(path_output + '\\obs_' + str(i) + '_.wav', wav_data, sr_obs)
+                _sound = AudioSegment.from_file(path_output + '\\obs_' + str(i) + '_.wav', "wav")
+                sound = effects.normalize(_sound)
+                sound.export(path_output + '\\obs_' + str(i) + '_normalized.wav', format="wav")
+                   
 def correct_spk_wav(path_output): # Time delay calculation
     j = 0
     for obs_json in path_obs_json:
@@ -64,8 +70,8 @@ def correct_spk_wav(path_output): # Time delay calculation
             for alt_obs in res_obs['alternatives']:
                 j += 1
                 if 'time_delay_start' in alt_obs:
-                    startTime = alt_obs['words'][0]['startTime'] - alt_obs['time_delay_start']
-                    endTime = alt_obs['words'][-1]['endTime'] - alt_obs['time_delay_end']
+                    startTime = alt_obs['words'][0]['startTime'] - max(0,alt_obs['time_delay_start'])
+                    endTime = alt_obs['words'][-1]['endTime'] - max(0,alt_obs['time_delay_end'])
                 else:
                     startTime = alt_obs['words'][0]['startTime']
                     endTime = alt_obs['words'][-1]['endTime']
@@ -73,6 +79,24 @@ def correct_spk_wav(path_output): # Time delay calculation
                 end_index = endTime * sr_obs
                 wav_data = data_spk[int(start_index):int(end_index)]
                 sf.write(path_output + '\\spk_' + str(j) + '_.wav', wav_data, sr_spk)
+                _sound = AudioSegment.from_file(path_output + '\\spk_' + str(j) + '_.wav', "wav")
+                sound = effects.normalize(_sound)
+                sound.export(path_output + '\\spk_' + str(j) + '_normalized.wav', format="wav")
+
+def normalize(path_output):
+    fs, data = wavfile.read(path_output)
+
+    plt.figure()
+    plt.subplot(2,1,1)
+    plt.plot(data)
+
+    xx = copy.deepcopy(data)
+    xx = xx - np.mean(xx)
+    x = xx/np.max(np.abs(xx))
+
+    plt.subplot(2,1,2)
+    plt.plot(x)
+    plt.show()
 
 split_obs_wav(path_obs_out_1)
 correct_spk_wav(path_spk_out_1)
