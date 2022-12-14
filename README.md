@@ -1,5 +1,10 @@
 # Time_delay_revise_demo
 
+------------------Dec.14----Update-------------
+
+    17. DTW_demo created and start to test.
+    18. Splited transcript still have some error.
+
 ------------------Dec.8----Update-------------
 
     15. Splited wav file into several different transcripts by new wav_time_change.py program
