@@ -1,5 +1,9 @@
 # Time_delay_revise_demo
 
+------------------Dec.16----Update-------------
+
+    19. New spk data were not sync well
+
 ------------------Dec.14----Update-------------
 
     17. DTW_demo created and start to test.
