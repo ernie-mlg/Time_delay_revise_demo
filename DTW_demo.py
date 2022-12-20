@@ -34,23 +34,29 @@ def fast_DTW(path_obs_index, path_spk_index):
 
     plt.figure(figsize=(12, 4))
 
-    # 波形をプロット
+
     plt.plot(data_obs, label="data_obs", color="k")
     plt.plot(data_spk, label="data_spk", color="r")
     plt.legend()
     # plt.show()
 
-    distance_12, path_dtw = fastdtw(data_spk, data_obs) # use left to sync right
+    distance_12, path_dtw = fastdtw(data_spk, data_obs) # use left to sync right 大概是对齐的结果有问题
 
     # 対応するポイントを線で結ぶ
     plt.figure(figsize=(12, 4))
     # for x_12 in path_dtw:
         # plt.plot(x_12, [data_obs[x_12[0]], data_spk[x_12[1]]], color="green", linestyle="dotted", linewidth = 0.1)
     
-    data_spk_new = []    
-    for i in range(0,len(path_dtw)):
-        data_spk_new.append(data_spk[path_dtw[i][0]])
-    # 波形をプロット
+    data_spk_new = []
+    i = 0    
+    # for i in range(0,len(path_dtw)):
+    for d in data_spk:
+        if path_dtw[i][1] != path_dtw[i+1][1]:
+            if path_dtw[i][0] != path_dtw[i+1][0]:
+                data_spk_new.append(d)
+                # data_spk_new[path_dtw[i][0]] = d[path_dtw[i][1]]
+        i += 1
+
     plt.plot(data_obs, label="data_obs", color="blue", linewidth = 0.1)
     plt.plot(data_spk, label="data_spk", color="red", linewidth = 0.1)
     plt.plot(data_spk_new, label="data_spk_new", color="green", linewidth = 0.1)
@@ -60,7 +66,7 @@ def fast_DTW(path_obs_index, path_spk_index):
         fontsize=14,
     )
     plt.show()
-    # print("finish")
+    print("finish")
 
 DTW_plot = (r"F:\Work\Ernie\sounds_Align\DTW_plot")
 index = 1
