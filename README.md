@@ -1,5 +1,10 @@
 # Time_delay_revise_demo
 
+-------------2023-Jan.13----Update-------------
+
+    HAPPY NEW YEAR!
+    20. Use transcript time revise for 1st step, DTW as 2nd step
+
 ------------------Dec.16----Update-------------
 
     19. New spk data were not sync well
