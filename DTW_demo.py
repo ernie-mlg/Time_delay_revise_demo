@@ -36,12 +36,6 @@ def fast_DTW(path_obs_index, path_spk_index):
 
     plt.figure(figsize=(12, 4))
 
-
-    # plt.plot(data_obs, label="data_obs", color="k")
-    # plt.plot(data_spk, label="data_spk", color="r")
-    # plt.legend()
-    # plt.show()
-
     distance_12, path_dtw = fastdtw(data_spk, data_obs) # use left to sync right
     
     # 対応するポイントを線で結ぶ
@@ -50,22 +44,21 @@ def fast_DTW(path_obs_index, path_spk_index):
         # plt.plot(x_12, [data_obs[x_12[0]], data_spk[x_12[1]]], color="green", linestyle="dotted", linewidth = 0.1)
     
     data_spk_new = []
-    i = 1    
-    # for i in range(0,len(path_dtw)):
-    while i < len(path_dtw):
-        if path_dtw[i][0] != path_dtw[i-1][0]:
-            for d in data_spk:
-        # if path_dtw[i][1] != path_dtw[i+1][1]:
-                data_spk_new.append(d)  # empty list affect result
-                # data_spk_new[path_dtw[i][0]] = d[path_dtw[i][1]]
+    i = 0    
+    while i < len(path_dtw)-1:
+        if path_dtw[i][0] != path_dtw[i+1][0]:
+            if path_dtw[i][1] != path_dtw[i+1][1]:
+                data_spk_new.append(data_spk[path_dtw[i][0]])          
+        else: 
+            data_spk_new.append(0)
         i += 1
 
-    plt.plot(data_obs, label="data_obs", color="blue", linewidth = 0.1)
-    plt.plot(data_spk, label="data_spk", color="red", linewidth = 0.1)
-    plt.plot(data_spk_new, label="data_spk_new", color="green", linewidth = 0.1)
+    plt.plot(data_obs, label="data_obs", color="blue", linewidth = 1)
+    plt.plot(data_spk, label="data_spk", color="red", linewidth = 1)
+    plt.plot(data_spk_new, label="data_spk_new", color="green", linewidth = 1)
     plt.legend()
     plt.title(
-        f"DTW(data_obs, data_spk)",
+        f"DTW(data_obs, data_spk)" + "_" + str(index),
         fontsize=14,
     )
     # data_spk_new = np.asarray(data_spk_new) 
@@ -74,11 +67,12 @@ def fast_DTW(path_obs_index, path_spk_index):
     # plt.show()
     print("finish")
 
-DTW_plot = (r"F:\Work\Ernie\sounds_Align\DTW_plot")
-index = 1
+# index = 63
 # fast_DTW(index, index)
+DTW_plot = (r"F:\Work\Ernie\sounds_Align\DTW_plot")
 # plt.savefig(DTW_plot + './' + str (index) + '.jpg')
     
+ 
 for index in range(1,85):
     if index <= 84:
         fast_DTW(index, index)
@@ -86,4 +80,3 @@ for index in range(1,85):
         print("No. ", index, " finished")
         index += 1
         plt.close()
-
