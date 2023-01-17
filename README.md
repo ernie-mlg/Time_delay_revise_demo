@@ -1,5 +1,10 @@
 # Time_delay_revise_demo
 
+
+-------------2023-Jan.13----Update-------------
+
+    21. DTW_demo now avaliable at lots of situations
+
 -------------2023-Jan.13----Update-------------
 
     HAPPY NEW YEAR!
