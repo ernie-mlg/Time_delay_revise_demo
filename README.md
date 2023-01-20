@@ -1,5 +1,8 @@
 # Time_delay_revise_demo
 
+-------------2023-Jan.20----Update-------------
+
+    22. combine_stereo.py created. Which can distinguishing the error of DTW result.
 
 -------------2023-Jan.13----Update-------------
 
