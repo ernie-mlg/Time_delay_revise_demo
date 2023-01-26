@@ -1,3 +1,4 @@
+import sys
 import json
 import editdistance
 import glob
@@ -51,7 +52,7 @@ def get_file_path(file_pathname):
 
 def main():
 
-    # please set your own path below ↓
+    # make sure the path is correct
     path_spk_list = get_file_path(r"F:\Work\Ernie\sounds_Align\sounds_file")    # Voice file of all people in speaker, which has time delay
     path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.json")  # Voice file of all people in obsever, as standard
     for path_obs in path_obs_list:
@@ -113,4 +114,3 @@ def main():
 
 if __name__ == '__main__':    
     main()
-
