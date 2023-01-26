@@ -1,3 +1,8 @@
+# To run this program, type:
+#   python delay_calculation_refactored.py ./spk1.json ./obs.json
+# .
+# If there are multiple speaker file, please use this program again
+
 import sys
 import json
 import editdistance
@@ -53,8 +58,8 @@ def get_file_path(file_pathname):
 def main():
 
     # make sure the path is correct
-    path_spk_list = get_file_path(r"F:\Work\Ernie\sounds_Align\sounds_file")    # Voice file of all people in speaker, which has time delay
-    path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.json")  # Voice file of all people in obsever, as standard
+    path_spk_list = glob.glob(sys.argv[1])    # Voice file of all people in speaker, which has time delay
+    path_obs_list = glob.glob(sys.argv[2])  # Voice file of all people in obsever, as standard
     for path_obs in path_obs_list:
         data_obs = json.load(open(path_obs, 'rb'), strict=False)
         for path_spk in path_spk_list:
@@ -107,7 +112,7 @@ def main():
                                         transcript_split_word = []  # reset word and value list
 
 
-    path_obs_new = open(path_obs.replace('.json', '_new.json'), 'w', encoding='utf-8')
+    path_obs_new = open(path_obs.replace('.json', '_test.json'), 'w', encoding='utf-8')
     json.dump(data_obs, path_obs_new, ensure_ascii=False)
 
     print('write json to path:', path_obs_new)
