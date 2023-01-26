@@ -16,35 +16,13 @@ def get_wav_path(file_pathname):
                     path_spk_list.append(file_pathname + filename) 
     return path_spk_list
   
-def split_obs_wav(path_output): # Time delay not calculation
-    transcript_index = 0
-    for obs_json in path_obs_json:
-        data_obs_json = json.load(open(obs_json, 'rb'), strict=False)
-        for res_obs in data_obs_json['response']['results']:
-            for alt_obs in res_obs['alternatives']:
-                transcript_index += 1
-                
-                startTime = alt_obs['words'][0]['startTime']
-                start_index = startTime * sr_obs
-                endTime = alt_obs['words'][-1]['endTime']
-                end_index = endTime * sr_obs
-                wav_data = data_obs[int(start_index):int(end_index)]    # original split wave                 
-                sf.write(path_output + '\\obs_' + str(transcript_index) + '_.wav', wav_data, sr_obs)    # split observer wave  
-
-def draw_figure(wav_data, starTime, endTime, spk_index, transcript_index): 
-                       
-    plt.plot(data_obs[int(starTime):int(endTime)], label="data_obs", color="blue", linewidth = 0.5)
-    plt.plot(data_spk[int(starTime):int(endTime)], label="data_spk", color="red", linewidth = 0.5)
-    plt.plot(wav_data, label="data_spk_new", color="green", linewidth = 1)  # draw new speaker wave figure
-    plt.legend()
-    plt.title(
-        f"transcript revise " + str(spk_index) + "_" + str (transcript_index),
-        fontsize=14,
-    )
-    plt.savefig(text_plot + './' + str (transcript_index) + '.jpg')
-    plt.close()
                    
-def correct_spk_wav(path_output): # Time delay calculation
+def correct_spk_wav(path_output):
+    """
+    Time delay calculation
+    
+    path_output: path of split sound files output
+    """    
     transcript_index = 0
     for obs_json in path_obs_json:
         data_obs_json = json.load(open(obs_json, 'rb'), strict=False)
@@ -68,10 +46,48 @@ def correct_spk_wav(path_output): # Time delay calculation
                 sf.write(path_output + '\\spk_' + str(transcript_index) + '_.wav', wav_data, sr_spk)   # output new speaker wave file                
                 draw_figure(wav_data, startTime_old, endTime_old, spk_index, transcript_index)
 
-path_spk_list = get_wav_path(r"F:\Work\Ernie\sounds_Align\sounds_file") # Open voice of one speaker
-path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.wav")  # Open voice of all people
-path_obs_json = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*new.json")
-path_obs_out_1 = (r"F:\Work\Ernie\sounds_Align\transcript_split_obs_1")
+def draw_figure(wav_data, starTime, endTime, spk_index, transcript_index): 
+    """    
+    wave figure drawing about observer voice, speaker voice before and after changing
+    
+    wav_data: splited voice wave data
+    starTime, endTime: time of one transcript which calculated by correct_spk_wav
+    spk_index, transcript_index: index number of speaker and trancsript
+    """    
+    plt.plot(data_obs[int(starTime):int(endTime)], label="data_obs", color="blue", linewidth = 0.5)
+    plt.plot(data_spk[int(starTime):int(endTime)], label="data_spk", color="red", linewidth = 0.5)
+    plt.plot(wav_data, label="data_spk_new", color="green", linewidth = 1)  # draw new speaker wave figure
+    plt.legend()
+    plt.title(
+        f"transcript revise " + str(spk_index) + "_" + str (transcript_index),
+        fontsize=14,
+    )
+    plt.savefig(text_plot + './' + str (transcript_index) + '.jpg')
+    plt.close()
+
+def split_obs_wav(path_output):
+    """
+    Time delay not calculated yet      
+    """
+    transcript_index = 0
+    for obs_json in path_obs_json:
+        data_obs_json = json.load(open(obs_json, 'rb'), strict=False)
+        for res_obs in data_obs_json['response']['results']:
+            for alt_obs in res_obs['alternatives']:
+                transcript_index += 1
+                
+                startTime = alt_obs['words'][0]['startTime']
+                start_index = startTime * sr_obs
+                endTime = alt_obs['words'][-1]['endTime']
+                end_index = endTime * sr_obs
+                wav_data = data_obs[int(start_index):int(end_index)]    # splited wave                 
+                sf.write(path_output + '\\obs_' + str(transcript_index) + '_.wav', wav_data, sr_obs)    # split observer wave  
+    
+# please set your own path below ↓
+path_spk_list = get_wav_path(r"F:\Work\Ernie\sounds_Align\sounds_file") # Voice path of one speaker
+path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.wav")  # Voice path of all people
+path_obs_json = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*new.json") # Json path of observer
+path_obs_out_1 = (r"F:\Work\Ernie\sounds_Align\transcript_split_obs_1") # Output path of observer voice
 
 for path_obs in path_obs_list:
     data_obs, sr_obs = librosa.load(path_obs, sr=None)
