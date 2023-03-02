@@ -1,7 +1,9 @@
 # To run this program, type:
-#   python delay_calculation_refactored.py ./spk1.json ./obs.json
+#   python 01_delay_calculation_refactored.py ./spk1.json ./obs_1.json
 # .
 # If there are multiple speaker file, please use this program again
+# This program is to calculate delay between speaker and observer, and write into json file
+
 
 import sys
 import json
@@ -38,12 +40,11 @@ def get_min_time_delay(time_delay_list):
     for l in time_delay_list:   # keep time delay in positive number
         if abs(l) < min_abs:
             min_abs = abs(l)
-            min_ele = l
-    
+            min_ele = l    
     return min_ele     
 
 def get_file_path(file_pathname):
-    path_spk_list = []
+    path_spk_list = []  # create a list to store all file path
     file_pathname = file_pathname + '\\'
     for filename in os.listdir(file_pathname):
         path = os.path.join(file_pathname, filename)
@@ -58,7 +59,7 @@ def get_file_path(file_pathname):
 def main():
 
     # make sure the path is correct
-    path_spk_list = glob.glob(sys.argv[1])    # Voice file of all people in speaker, which has time delay
+    path_spk_list = glob.glob(sys.argv[1])  # Voice file of all people in speaker, which has time delay
     path_obs_list = glob.glob(sys.argv[2])  # Voice file of all people in obsever, as standard
     for path_obs in path_obs_list:
         data_obs = json.load(open(path_obs, 'rb'), strict=False)
@@ -80,7 +81,7 @@ def main():
                         for alt_spk in res_spk['alternatives']:
                             time_diff = abs(alt_spk['words'][0]['startTime'] - alt_obs['words'][0]['startTime'])
                                                         
-                            MAX_TIME_DIFFERENCE = 40    # [changeable] diff of time less than 40 sec
+                            MAX_TIME_DIFFERENCE = 40    # [changeable] difference of time less than 40 sec
                             if time_diff <= MAX_TIME_DIFFERENCE:
                                 pos_idx, similarity_list = find_suit_position(alt_obs['transcript'], alt_spk['transcript'])
                                 trans_obs_sub = alt_obs['transcript'][pos_idx:pos_idx + len(alt_spk['transcript'])]
@@ -96,13 +97,16 @@ def main():
                                         time_delay_end_list.append(TDE)
                                        
                                         minele_s = get_min_time_delay(time_delay_start_list)
-                                        minele_e = get_min_time_delay(time_delay_end_list)
+                                        minele_e = get_min_time_delay(time_delay_end_list)                                       
+                                                                                
+                                        alt_spk['time_delay_start'] = minele_s
+                                        alt_spk['time_delay_end'] = minele_e                                    
                                         
                                         alt_obs['time_delay_start'] = minele_s
                                         alt_obs['time_delay_end'] = minele_e
         
                                         alt_obs['transcript_split'] = alt_spk['transcript']                                        
-                                        alt_obs['transcript_list'].append(transcript_split_word[max_value])
+                                        alt_obs['transcript_list'].append(transcript_split_word[max_value])                                     
         
                                         print('Observer [{} to {}] : {} '.format(alt_obs['words'][0]['startTime'], alt_obs['words'][-1]['endTime'], alt_obs['transcript']))
                                         print('time_delay_start ', alt_obs['time_delay_start'])
@@ -112,10 +116,14 @@ def main():
                                         transcript_split_word = []  # reset word and value list
 
 
-    path_obs_new = open(path_obs.replace('.json', '_test.json'), 'w', encoding='utf-8')
+    path_obs_new = open(path_obs.replace('.json', '_new.json'), 'w', encoding='utf-8')
     json.dump(data_obs, path_obs_new, ensure_ascii=False)
+    print('write json to obs path:', path_obs_new)
+    
+    path_spk_new = open(path_spk.replace('.json', '_new.json'), 'w', encoding='utf-8')
+    json.dump(data_spk, path_spk_new, ensure_ascii=False)    
+    print('write json to spk path:', path_spk_new)
 
-    print('write json to path:', path_obs_new)
 
 if __name__ == '__main__':    
     main()
