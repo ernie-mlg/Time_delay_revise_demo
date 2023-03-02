@@ -1,7 +1,7 @@
 # To run this program, type:
-#   python 01_delay_calculation_refactored.py ./spk1.json ./obs_1.json
+#   python 01_delay_calculation.py ./spk1.json ./obs.json
 # .
-# If there are multiple speaker file, please use this program again
+# Please use this program again, if there are multiple speaker file,
 # This program is to calculate delay between speaker and observer, and write into json file
 
 
@@ -10,7 +10,7 @@ import json
 import editdistance
 import glob
 import os
-from collections import Counter
+
 
 def similarity(string_1, string_2):
     similarity = editdistance.eval(string_1, string_2) / len(string_2)
@@ -56,7 +56,7 @@ def get_file_path(file_pathname):
     return path_spk_list    
 
 
-def main():
+def main(MAX_TIME_DIFFERENCE, MINIMUM_SIMILARITY):
 
     # make sure the path is correct
     path_spk_list = glob.glob(sys.argv[1])  # Voice file of all people in speaker, which has time delay
@@ -81,16 +81,14 @@ def main():
                         for alt_spk in res_spk['alternatives']:
                             time_diff = abs(alt_spk['words'][0]['startTime'] - alt_obs['words'][0]['startTime'])
                                                         
-                            MAX_TIME_DIFFERENCE = 40    # [changeable] difference of time less than 40 sec
-                            if time_diff <= MAX_TIME_DIFFERENCE:
+                            if time_diff <= MAX_TIME_DIFFERENCE:    # [changeable] difference of time less than 40 sec
                                 pos_idx, similarity_list = find_suit_position(alt_obs['transcript'], alt_spk['transcript'])
                                 trans_obs_sub = alt_obs['transcript'][pos_idx:pos_idx + len(alt_spk['transcript'])]
                                 transcript_split_value.append(max(similarity_list))
                                 transcript_split_word.append(trans_obs_sub)
                                 max_value = transcript_split_value.index(max(transcript_split_value))
                                 
-                                MINIMUM_SIMILARITY = 2/3    # [changeable] similarity of transcript is over than 2/3
-                                if similarity(trans_obs_sub, alt_spk['transcript']) > MINIMUM_SIMILARITY:
+                                if similarity(trans_obs_sub, alt_spk['transcript']) > MINIMUM_SIMILARITY:   # [changeable] similarity of transcript is over than 2/3
                                         print('Speaker in observer >>>>',trans_obs_sub)
                                         TDS, TDE = get_time_delay(alt_obs, alt_spk) # TDS = time delay start, TDE = time delay end
                                         time_delay_start_list.append(TDS)
@@ -126,4 +124,4 @@ def main():
 
 
 if __name__ == '__main__':    
-    main()
+    main(40, 2/3)
