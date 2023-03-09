@@ -4,7 +4,13 @@
 #   python 03_csv_record.py
 #
 # If there are multiple speaker file, please use this program again
-# Please make sure that create
+# [EXAMPLE] input the path of observer and speaker like this:
+# オリジナルフォルダ名前を入力してください。Enter the name of the original folder: 
+# sounds_file
+# Please input the name of speaker json file, end with extension name '.json': 
+# watanabe_00011.json 
+# Please input the name of csv, end with extension name '.csv': 
+# speaker1.csv  
 
 import os
 import csv
