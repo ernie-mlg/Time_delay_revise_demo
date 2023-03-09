@@ -5,17 +5,16 @@
 # This program is to calculate delay between speaker and observer, and write into json file
 
 
+import os
 import sys
+import glob
 import json
 import editdistance
-import glob
-import os
 
 
 def similarity(string_1, string_2):
     similarity = editdistance.eval(string_1, string_2) / len(string_2)
     return 1 - similarity
-
 
 def find_suit_position(trans_obs, trans_spk):
     similarity_list = []
@@ -26,7 +25,6 @@ def find_suit_position(trans_obs, trans_spk):
 
     position_index = similarity_list.index(max(similarity_list))    # find the most similar transcript
     return position_index, similarity_list  # return the position of transcript
-
 
 def get_time_delay(alt_obs, alt_spk):
     time_delay_start = alt_obs['words'][0]['startTime'] - alt_spk['words'][0]['startTime']
@@ -55,10 +53,8 @@ def get_file_path(file_pathname):
                     print(path_spk_list)
     return path_spk_list    
 
-
 def main(MAX_TIME_DIFFERENCE, MINIMUM_SIMILARITY):
 
-    # make sure the path is correct
     path_spk_list = glob.glob(sys.argv[1])  # Voice file of all people in speaker, which has time delay
     path_obs_list = glob.glob(sys.argv[2])  # Voice file of all people in obsever, as standard
     for path_obs in path_obs_list:
@@ -124,4 +120,4 @@ def main(MAX_TIME_DIFFERENCE, MINIMUM_SIMILARITY):
 
 
 if __name__ == '__main__':    
-    main(40, 2/3)
+    main(40, 2/3)   #(MAX_TIME_DIFFERENCE, MINIMUM_SIMILARITY)
