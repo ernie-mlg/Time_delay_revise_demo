@@ -26,11 +26,7 @@ import json
 import librosa 
 import matplotlib.pyplot as plt
 import soundfile as sf
-
-# please set your own path below ↓
-path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new].wav")  # Original voice path of observer, all people
-path_obs_json = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*_new_new_new.json") # Json path of observer, the number of "_new" behind are as many as speakers
-                   
+ 
 def correct_spk_wav(path_output):
     """
     This function is used to correct the time delay of each speaker by json text file
@@ -130,6 +126,9 @@ name_spk_output = input("話者の出力フォルダ名前を入力してくだ�
 name_text_plot = input("図の出力フォルダ名前を入力してください。Enter the name of the plot output folder: ")
 path_spk_list = get_wav_path(os.path.join(os.getcwd(), name_original)) # Original voice path of one speaker
 
+path_obs_list = glob.glob(os.path.join(os.getcwd(), name_original, "*observer*[!new].wav"))  # Original voice path of observer, all people
+path_obs_json = glob.glob(os.path.join(os.getcwd(), name_original, "*observer*_new_new_new.json")) # Json path of observer, the number of "_new" behind are as many as speakers
+                  
 for path_obs in path_obs_list:
     data_obs, sr_obs = librosa.load(path_obs, sr=None)
 
