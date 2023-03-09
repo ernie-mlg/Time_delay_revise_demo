@@ -1,8 +1,18 @@
 # To run this program, type:
 #   python 02_wav_time_change.py
 #
+# [EXAMPLE] Input the path of observer and speaker like this:
 #
-# This program is to split the sound file into several parts, and plot the splited wave of each part
+# オリジナルフォルダ名前を入力してください。Enter the name of the original folder: 
+# sounds_file
+# オブザーバーの出力フォルダ名前を入力してください。Enter the name of the observer output folder: 
+# observer
+# 話者の出力フォルダ名前を入力してください。Enter the name of the speaker output folder: 
+# speaker_
+# 図の出力フォルダ名前を入力してください。Enter the name of the plot output folder: 
+# plot_
+# 
+# This program can do serval things:
 #   1. Read the sound file
 #   2. Split the sound file into several parts
 #   3. Plot the wave of each part
@@ -10,29 +20,20 @@
 #   5. Save the sound file of each part
 
 
-import librosa 
-import glob
 import os
+import glob
 import json
+import librosa 
 import matplotlib.pyplot as plt
 import soundfile as sf
 
-def get_wav_path(file_pathname):
-    path_spk_list = []
-    file_pathname = file_pathname + '\\'
-    for filename in os.listdir(file_pathname):
-        path = os.path.join(file_pathname, filename)
-        if 'observer' not in filename:
-            if 'new' not in filename:
-                if 'meeting.wav' in filename: 
-                    path_spk_list.append(file_pathname + filename) 
-    return path_spk_list
+# please set your own path below ↓
+path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new].wav")  # Original voice path of observer, all people
+path_obs_json = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*_new_new_new.json") # Json path of observer, the number of "_new" behind are as many as speakers
                    
 def correct_spk_wav(path_output):
     """
-    Time delay calculation
-    
-    path_output: path of split sound files output
+    This function is used to correct the time delay of each speaker by json text file
     """    
     transcript_index = 0
     for obs_json in path_obs_json:
@@ -60,6 +61,7 @@ def correct_spk_wav(path_output):
 def draw_figure(wav_data, startTime, endTime, spk_index, transcript_index, Title_startTime): 
     """    
     wave figure drawing about observer voice, speaker voice before and after changing
+    This function is used to double check the error of each voice by figure 
     
     wav_data: splited voice wave data
     startTime, endTime: time of one transcript which calculated by correct_spk_wav
@@ -67,7 +69,7 @@ def draw_figure(wav_data, startTime, endTime, spk_index, transcript_index, Title
     """    
     plt.plot(data_obs[int(startTime):int(endTime)], label="data_obs", color="blue", linewidth = 0.5)
     plt.plot(data_spk[int(startTime):int(endTime)], label="data_spk", color="red", linewidth = 0.5)
-    plt.plot(wav_data, label="data_spk_new", color="green", linewidth = 1)  # draw changed speaker wave figure
+    plt.plot(wav_data, label="data_spk_new", color="green", linewidth = 1)  # draw speaker wave figure after changing
     plt.legend()
     plt.title(
         f"Speaker" + str(spk_index) + "_" + str(transcript_index) + ", start time" + str(Title_startTime),
@@ -76,10 +78,14 @@ def draw_figure(wav_data, startTime, endTime, spk_index, transcript_index, Title
     plt.savefig(text_plot + './' + str (transcript_index) + '.jpg')
     plt.close()
 
-def split_obs_wav(path_output):
+def split_obs_wav(name_obs_output):
     """
-    Time delay not calculated yet      
+    Time delay not calculated yet
+    This function is used to double check the error of each voice by voice  
     """
+    obs_index = 1
+    create_dir(name_obs_output, obs_index)
+    path_output = os.path.join(os.getcwd(), name_obs_output)
     transcript_index = 0
     for obs_json in path_obs_json:
         data_obs_json = json.load(open(obs_json, 'rb'), strict=False)
@@ -93,22 +99,47 @@ def split_obs_wav(path_output):
                 start_index = startTime * sr_obs
                 end_index = endTime * sr_obs
                 obs_wave = data_obs[int(start_index):int(end_index)]    # splited wave                 
-                sf.write(path_output + '\\obs_' + str(transcript_index) + '_.wav', obs_wave, sr_obs)    # split observer wave  
+                sf.write(path_output + str(obs_index) + '\\obs_' + str(transcript_index) + '.wav', obs_wave, sr_obs)    # split observer wave  
                 
-# please set your own path below ↓
-path_spk_list = get_wav_path(r"F:\Work\Ernie\sounds_Align\sounds_file") # Voice path of one speaker
-path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*[!new]meeting_1.wav")  # Voice path of all people
-path_obs_json = glob.glob(r"F:\Work\Ernie\sounds_Align\sounds_file\*observer*_new_new_new.json") # Json path of observer
-path_obs_output = (r"F:\Work\Ernie\sounds_Align\transcript_split_obs_1") # Output path of observer voice
-   
+def create_dir(folder_name, index):        
+    name = os.path.join(os.getcwd(), folder_name + str(index))
+    if not os.path.exists(name):
+        os.makedirs(name)
+        print(f"Folder '{name}' created successfully!")
+    else:
+        print(f"Folder '{name}' already exists!")
+       
+def get_wav_path(file_pathname):
+    """
+    Please change the keyword if the file name is different
+    This function is used to get all the path of speaker voice  
+    """
+    path_spk_list = []
+    file_pathname = file_pathname + '\\'
+    for filename in os.listdir(file_pathname):
+        if 'observer' not in filename:  # exclude observer voice, please change the keyword if the file name is different
+            if 'new' not in filename:
+                if '00011.wav' in filename: # please change the keyword for matching the speaker file name
+                    path_spk_list.append(file_pathname + filename) 
+    return path_spk_list
+
+
+name_original = input("オリジナルフォルダ名前を入力してください。Enter the name of the original folder: ")
+name_obs_output = input("オブザーバーの出力フォルダ名前を入力してください。Enter the name of the observer output folder: ")
+name_spk_output = input("話者の出力フォルダ名前を入力してください。Enter the name of the speaker output folder: ")
+name_text_plot = input("図の出力フォルダ名前を入力してください。Enter the name of the plot output folder: ")
+path_spk_list = get_wav_path(os.path.join(os.getcwd(), name_original)) # Original voice path of one speaker
+
 for path_obs in path_obs_list:
     data_obs, sr_obs = librosa.load(path_obs, sr=None)
-    
+
 spk_index = 0
 for path_spk in path_spk_list:
     spk_index += 1
     data_spk, sr_spk = librosa.load(path_spk, sr=None)
-    path_spk_out = (r"F:\Work\Ernie\sounds_Align\transcript_split_spk_" + str(spk_index))
-    text_plot = (r"F:\Work\Ernie\sounds_Align\text_plot_" + str(spk_index))
+    create_dir(name_spk_output, spk_index)
+    create_dir(name_text_plot, spk_index)
+    path_spk_out = os.path.join(os.getcwd(), name_spk_output + str(spk_index)) # Output path of speaker voice
+    text_plot = os.path.join(os.getcwd(), name_text_plot + str(spk_index)) # Output path of wave figure
     correct_spk_wav(path_spk_out)
-split_obs_wav(path_obs_output)
+split_obs_wav(name_obs_output)
