@@ -1,5 +1,10 @@
 # Time_delay_revise_demo
 
+-------------2023-Mar.17----Update-------------
+
+    23. 02_wav_time_change(for_Mac).py created, which repaired the path error on MacOS.
+    24. All programe has been refactored.
+
 -------------2023-Jan.20----Update-------------
 
     22. combine_stereo.py created. Which can distinguishing the error of DTW result.
