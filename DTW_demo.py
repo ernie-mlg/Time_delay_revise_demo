@@ -6,35 +6,28 @@ from fastdtw import fastdtw
 from pathlib import Path
 from scipy import stats
 import librosa
-import wavfile
 import os
+import wavfile
 import glob
 import matplotlib
 
-def get_file_path(file_pathname):
-    path_spk_list = []
-    file_pathname = file_pathname + '\\'
-    for filename in os.listdir(file_pathname):
-        path = os.path.join(file_pathname, filename)
-        if 'observer' not in filename:
-            if 'new' not in filename:
-                if 'meeting.wav' in filename: 
-                    path_spk_list.append(file_pathname + filename) 
-                    # print(path_spk_list)
-    return path_spk_list    
+# name_obs = input("切り離されたオブザーバー音声のフォルダ名前を入力してください。Enter the name of the splited observer folder: ") # name of observer file
+# name_spk = input("切り離された話者音声のフォルダ名前を入力してください。Enter the name of the splited speaker folder: ")  
+# wav_output = input("出力するwavファイルのフォルダ名前を入力してください。Enter the name of the output wav folder: ") 
+name_obs = "observer1"
+name_spk = "speaker1"
+wav_output = "output"
+path_obs_list = glob.glob(os.path.join(os.getcwd(), name_obs, "obs*.wav"))  # Original voice path of observer, all people
+path_spk_list = glob.glob(os.path.join(os.getcwd(), name_spk, "spk*.wav"))  # Original voice path of observer, all people
 
-# path_spk_list = get_file_path(r"F:\Work\Ernie\sounds_Align\transcript_split_spk_1")
-# path_spk_list = glob.glob(r"F:\Work\Ernie\sounds_Align\transcript_split_spk_1\*.wav")  # Voice of all people
-# path_obs_list = glob.glob(r"F:\Work\Ernie\sounds_Align\transcript_split_obs_2\*.wav")  # Voice of all people
 
-def fast_DTW(path_obs_index, path_spk_index, spk_num):
-    
-    cwd = Path.cwd()
-    path_obs_list = Path(Path.joinpath(cwd, 'transcript_split_obs_1', 'obs_' + str (path_obs_index) + '_.wav'))
-    path_spk_list = Path(Path.joinpath(cwd, 'transcript_split_spk_'+ str(spk_num), 'spk_' + str (path_spk_index) + '_.wav'))
+def fast_DTW(index, name_obs, name_spk):
 
-    data_spk, Fs1 = librosa.load(path_spk_list, sr=1600)
-    data_obs, sr = librosa.load(path_obs_list, sr=1600)
+    obs = os.path.join(os.getcwd(), name_obs, "obs_" + str(index) + ".wav")
+    spk = os.path.join(os.getcwd(), name_spk, "spk_" + str(index) + "_.wav")
+
+    data_obs, sr = librosa.load(obs, sr=1600)
+    data_spk, Fs1 = librosa.load(spk, sr=1600)
 
     plt.figure(figsize=(12, 4))
 
@@ -71,23 +64,16 @@ def fast_DTW(path_obs_index, path_spk_index, spk_num):
         f"DTW(data_obs, data_spk)" + "_" + str(index),
         fontsize=14,
     )
-    # data_spk_new = np.asarray(data_spk_new) 
-    # wavfile.write(DTW_plot + './wav_output/' + str (index) + '.wav', 1600, data_spk_new.astype(np.int16)) 
-    # sf.write(DTW_plot + './wav_output_0' + str(spk_num) + '/' + str (index) + '.wav', data_spk_new, 1600)  # wavfile output
+    data_spk_new = np.asarray(data_spk_new) 
+    wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600, data_spk_new.astype(np.int16))    # wavfile output
     plt.show()
     print("finish")
 
-DTW_plot = (r"F:\Work\Ernie\sounds_Align\DTW_plot")
-# index = 63
-# fast_DTW(index, index)
-# plt.savefig(DTW_plot + './' + str (index) + '.jpg')
-    
-for spk_num in range(1,4): 
-    for index in range(1,85):
-        if index <= 84:
-            fast_DTW(index, index, spk_num)
-            plt.savefig(DTW_plot + './' + str (index) + '.jpg')
-            print("No. ", index, " finished")
-            index += 1
-            matplotlib.pyplot.close()
-            plt.close()
+index = 0
+for path_spk in path_spk_list:
+    index += 1
+    fast_DTW(index, name_obs, name_spk)
+    plt.savefig(os.getcwd() + '/' + str (index) + '.jpg')
+    print("No. ", index, " finished")
+    matplotlib.pyplot.close()
+    plt.close()
