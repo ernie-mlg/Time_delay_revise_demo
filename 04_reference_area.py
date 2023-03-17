@@ -21,7 +21,7 @@ from matplotlib.pyplot import MultipleLocator
 name_original = input("オリジナルフォルダ名前を入力してください。Enter the name of the original folder: ")   
 name_obs = input("Please input the name of observer wav file, end with extension name '.wav': ") # name of observer file
 path_obs = os.path.join(os.getcwd(), name_original, name_obs) # Wav path of observer
-path_csv_list = glob.glob(os.path.join(os.getcwd(), "speaker*.csv")) # Csv path of speaker
+path_csv_list = glob.glob(os.path.join(os.getcwd(), "*.csv")) # Csv path of speaker
     
 def plot_obs(path_obs):
     data_obs, sr_obs = librosa.load(path_obs, sr=None)
