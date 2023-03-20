@@ -5,11 +5,15 @@ import pandas as pd
 from fastdtw import fastdtw
 from pathlib import Path
 from scipy import stats
+from scipy.interpolate import interp1d
 import librosa
 import os
 import wavfile
 import glob
 import matplotlib
+import scipy
+from scipy.io.wavfile import write
+
 
 # name_obs = input("切り離されたオブザーバー音声のフォルダ名前を入力してください。Enter the name of the splited observer folder: ") # name of observer file
 # name_spk = input("切り離された話者音声のフォルダ名前を入力してください。Enter the name of the splited speaker folder: ")  
@@ -31,8 +35,7 @@ def fast_DTW(index, name_obs, name_spk):
 
     plt.figure(figsize=(12, 4))
 
-    # THIS IS THE CORE CODE ⬇
-    distance_12, path_dtw = fastdtw(data_spk, data_obs) # use left to sync right
+    distance_12, path_dtw = fastdtw(data_spk, data_obs) # ⬅️ THIS IS THE CORE CODE ⬅️ use left to sync right
     
     max_dtw = []
     data_spk_new = [data_spk]
@@ -65,8 +68,8 @@ def fast_DTW(index, name_obs, name_spk):
         fontsize=14,
     )
     data_spk_new = np.asarray(data_spk_new) 
-    wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600, data_spk_new.astype(np.int16))    # wavfile output
-    plt.show()
+    scipy.io.wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600,  data = data_spk_new.astype(np.int16))    # wavfile output  data_spk_new.astype(np.int16)
+    # plt.show()
     print("finish")
 
 index = 0
