@@ -62,21 +62,18 @@ def fast_DTW(index, name_obs, name_spk):
     plt.plot(data_obs, label="data_obs", color="blue", linewidth = 1)
     plt.plot(data_spk, label="data_spk", color="red", linewidth = 1)
     plt.plot(data_spk_new, label="data_spk_new", color="green", linewidth = 1)
-    plt.legend()
+    plt.legend(["data_obs"],["data_spk"])
     plt.title(
         f"DTW(data_obs, data_spk)" + "_" + str(index),
         fontsize=14,
     )
     data_spk_new = np.asarray(data_spk_new) 
-    scipy.io.wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600,  data = data_spk_new.astype(np.int16))    # wavfile output  data_spk_new.astype(np.int16)
-    # plt.show()
-    print("finish")
+    scipy.io.wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600, data = data_spk_new.astype(np.int16))    # wavfile output    data = data_spk_new.astype(np.int16)
+    print("No. ", index, " finished")
+    matplotlib.pyplot.close()
+    plt.close()
 
 index = 0
 for path_spk in path_spk_list:
     index += 1
     fast_DTW(index, name_obs, name_spk)
-    plt.savefig(os.getcwd() + '/' + str (index) + '.jpg')
-    print("No. ", index, " finished")
-    matplotlib.pyplot.close()
-    plt.close()
