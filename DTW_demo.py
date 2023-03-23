@@ -66,6 +66,7 @@ def fast_DTW(index, name_obs, name_spk):
         fontsize=14,
     )
     data_spk_new = np.asarray(data_spk_new) 
+#     Now wavfile output have some trouble
     scipy.io.wavfile.write(os.getcwd() + wav_output + str (index) + '.wav', 1600, data = data_spk_new.astype(np.int16))    # wavfile output    data = data_spk_new.astype(np.int16)
     print("No. ", index, " finished")
     matplotlib.pyplot.close()
