@@ -9,7 +9,7 @@
 
     22. combine_stereo.py created. Which can distinguishing the error of DTW result.
 
--------------2023-Jan.13----Update-------------
+-------------2023-Jan.17----Update-------------
 
     21. DTW_demo now avaliable at lots of situations
 
