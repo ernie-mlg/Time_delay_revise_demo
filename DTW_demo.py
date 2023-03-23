@@ -15,12 +15,10 @@ import scipy
 from scipy.io.wavfile import write
 
 
-# name_obs = input("切り離されたオブザーバー音声のフォルダ名前を入力してください。Enter the name of the splited observer folder: ") # name of observer file
-# name_spk = input("切り離された話者音声のフォルダ名前を入力してください。Enter the name of the splited speaker folder: ")  
-# wav_output = input("出力するwavファイルのフォルダ名前を入力してください。Enter the name of the output wav folder: ") 
-name_obs = "observer1"
-name_spk = "speaker1"
-wav_output = "output"
+name_obs = input("切り離されたオブザーバー音声のフォルダ名前を入力してください。Enter the name of the splited observer folder: ") # name of observer file
+name_spk = input("切り離された話者音声のフォルダ名前を入力してください。Enter the name of the splited speaker folder: ")  
+wav_output = input("出力するwavファイルのフォルダ名前を入力してください。Enter the name of the output wav folder: ") 
+
 path_obs_list = glob.glob(os.path.join(os.getcwd(), name_obs, "obs*.wav"))  # Original voice path of observer, all people
 path_spk_list = glob.glob(os.path.join(os.getcwd(), name_spk, "spk*.wav"))  # Original voice path of observer, all people
 
